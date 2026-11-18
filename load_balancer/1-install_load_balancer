@@ -7,9 +7,13 @@ CONFIG="/etc/haproxy/haproxy.cfg"
 if ! grep -q "7296-web-01" "$CONFIG"; then
 	cat >> "$CONFIG" <<END
 
+global
+	h1-case-adjust x-served-by X-Served-By
+
 frontend web_frontend
 	bind *:80
 	mode http
+	option h1-case-adjust-bogus-client
 	default_backend web_backend
 
 backend web_backend
